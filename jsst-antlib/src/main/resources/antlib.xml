@@ -1,0 +1,14 @@
+<?xml version="1.0"?>
+<antlib>
+    <macrodef name="jsst-gen-war">
+        <attribute name="war"/>
+        <attribute name="destfile"/>
+        <element name="war-update-conf" implicit="true"/>
+        <sequential>
+            <copy file="@{war}" tofile="@{destfile}"/>
+            <war destfile="@{destfile}" update="true">
+                <war-update-conf/>
+            </war>
+        </sequential>
+    </macrodef>
+</antlib>

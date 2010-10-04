@@ -1,0 +1,43 @@
+<?xml version="1.0"?>
+<project xmlns:ivy="antlib:org.apache.ivy.ant" name="jsst-testng-test" default="default" basedir=".">
+
+    <property name="test.src.dir" value="${basedir}/src/test/java"/>
+<!--
+    <property name="test.resources.dir" value="${basedir}/src/test/resources"/>
+-->
+    <property name="build.dir" value="${basedir}/build"/>
+    <property name="classes.dir" value="${build.dir}/classes"/>
+    <property name="lib.dir" value="${build.dir}/lib"/>
+    <property name="ivy.lib.dir" value="${build.dir}/lib"/>
+
+    <target name="prepare">
+        <delete dir="${build.dir}"/>
+        <mkdir dir="${build.dir}"/>
+        <mkdir dir="${classes.dir}"/>
+        <mkdir dir="${lib.dir}"/>
+        <ivy:retrieve/>
+        <typedef onerror="failall" resource="antlib.xml"
+                 classpath="${basedir}/../jsst-antlib/target/jsst-antlib-1.0.jar"/>
+    </target>
+
+    <target name="compile" depends="prepare">
+        <javac srcdir="${test.src.dir}" destdir="${classes.dir}" debug="on" debuglevel="lines,source">
+            <classpath>
+                <fileset dir="${lib.dir}" includes="*.jar"/>
+            </classpath>
+        </javac>
+<!--
+        <copy todir="${classes.dir}">
+            <fileset dir="${test.resources.dir}" includes="**/*"/>
+        </copy>
+-->
+    </target>
+    
+    <target name="default" depends="compile">
+        <jsst-gen-war war="${basedir}/../jsst-war/target/jsst-war-1.0.war"
+                      destfile="${build.dir}/jsst-testng-test.war">
+            <classes dir="${classes.dir}"/>
+            <lib dir="${lib.dir}"/>
+        </jsst-gen-war>
+    </target>
+</project>
