@@ -4,10 +4,40 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
+    <parent>
+        <groupId>jsst</groupId>
+        <artifactId>jsst</artifactId>
+        <relativePath>../</relativePath>
+        <version>1.0.${build.number}</version>
+    </parent>
+
     <groupId>jsst</groupId>
     <artifactId>jsst-antlib</artifactId>
-    <version>1.0</version>
+    <version>1.0.${build.number}</version>
     <packaging>jar</packaging>
     <name>Java Server-Side Testing - AntLib</name>
-    
+
+    <build>
+        <plugins>
+            <plugin>
+                <artifactId>maven-antrun-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>run</goal>
+                        </goals>
+                        <phase>package</phase>
+                        <configuration>
+                            <tasks>
+                                <copy verbose="true"
+                                      file="target/${project.artifactId}-${project.version}.${project.packaging}"
+                                      todir="../target"/>
+                            </tasks>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
+
 </project>

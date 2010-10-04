@@ -6,9 +6,13 @@
 
     <groupId>jsst</groupId>
     <artifactId>jsst</artifactId>
-    <version>1.0</version>
+    <version>1.0.${build.number}</version>
     <packaging>pom</packaging>
     <name>Java Server-Side Testing</name>
+
+    <properties>
+        <build.number>0</build.number>
+    </properties>
 
     <modules>
         <module>jsst-core</module>
