@@ -34,6 +34,7 @@
     </target>
     
     <target name="default" depends="compile">
+        <echo file="${classes.dir}/jsst-env.properties" message="SYSTEM.PROPERTY=value"/>
         <jsst-gen-war war="${basedir}/../jsst-war/target/jsst-war-1.0.1.war"
                       destfile="${build.dir}/jsst-testng-test.war">
             <classes dir="${classes.dir}"/>

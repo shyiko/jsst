@@ -4,7 +4,7 @@ import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
-import static org.testng.Assert.fail;
+import static org.testng.Assert.assertEquals;
 
 /**
  * @author shyiko
@@ -19,7 +19,7 @@ public class TestCase {
 
     @Test
     public void testMethod() throws Exception {
-        fail("testMethod");
+        assertEquals("value", System.getProperty("SYSTEM.PROPERTY"));
     }
 
     @AfterClass

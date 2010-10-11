@@ -5,6 +5,7 @@
     <servlet>
         <servlet-name>FrontController</servlet-name>
         <servlet-class>jsst.server.FrontController</servlet-class>
+        <load-on-startup>1</load-on-startup>
     </servlet>
     <servlet-mapping>
         <servlet-name>FrontController</servlet-name>

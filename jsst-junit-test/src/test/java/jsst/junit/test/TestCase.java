@@ -4,7 +4,7 @@ import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import static org.junit.Assert.fail;
+import static org.junit.Assert.assertEquals;
 
 /**
  * @author shyiko
@@ -19,7 +19,7 @@ public class TestCase {
 
     @Test
     public void testMethod() throws Exception {
-        fail("testMethod");
+        assertEquals("value", System.getProperty("SYSTEM.PROPERTY"));
     }
 
     @AfterClass

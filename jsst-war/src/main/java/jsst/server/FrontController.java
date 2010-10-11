@@ -16,10 +16,11 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.PrintStream;
-import java.io.PrintWriter;
+import java.io.*;
+import java.net.URL;
+import java.util.Map;
+import java.util.Properties;
+import java.util.Set;
 
 /**
  * @author shyiko
@@ -27,12 +28,36 @@ import java.io.PrintWriter;
  */
 public class FrontController extends HttpServlet {
 
+    private static final String ENVIRONMENT_PROPERTIES_FILE = "jsst-env.properties";
     private static TestRunner testRunner;
 
     @Override
     public void init(ServletConfig config) throws ServletException {
         super.init(config);
+        initSystemProperties();
         testRunner = new ReflectionTestRunner();
+    }
+
+    private void initSystemProperties() throws ServletException {
+        URL resource = FrontController.class.getClassLoader().getResource(ENVIRONMENT_PROPERTIES_FILE);
+        if (resource != null) {
+            Properties properties = new Properties();
+            try {
+                InputStream inputStream = resource.openStream();
+                try {
+                    properties.load(inputStream);
+                    Set<Map.Entry<Object,Object>> entries = properties.entrySet();
+                    for (Map.Entry<Object, Object> entry : entries) {
+                        System.setProperty((String) entry.getKey(), (String) entry.getValue());
+                    }
+                } finally {
+                    inputStream.close();
+                }
+            } catch (IOException e) {
+                throw new ServletException("Unable to load system properties from " +
+                        ENVIRONMENT_PROPERTIES_FILE + " file", e);
+            }
+        }
     }
 
     @Override
