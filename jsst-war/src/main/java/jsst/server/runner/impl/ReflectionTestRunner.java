@@ -40,6 +40,7 @@ public class ReflectionTestRunner implements TestRunner {
         if (result == null) {
             Class testClass = Class.forName(className);
             result = testClass.newInstance();
+            tests.put(className, result);
         }
         return result;
     }
