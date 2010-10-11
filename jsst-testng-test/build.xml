@@ -17,7 +17,7 @@
         <mkdir dir="${lib.dir}"/>
         <ivy:retrieve/>
         <typedef onerror="failall" resource="antlib.xml"
-                 classpath="${basedir}/../jsst-antlib/target/jsst-antlib-1.0.jar"/>
+                 classpath="${basedir}/../jsst-antlib/target/jsst-antlib-1.0.1.jar"/>
     </target>
 
     <target name="compile" depends="prepare">
@@ -34,7 +34,7 @@
     </target>
     
     <target name="default" depends="compile">
-        <jsst-gen-war war="${basedir}/../jsst-war/target/jsst-war-1.0.war"
+        <jsst-gen-war war="${basedir}/../jsst-war/target/jsst-war-1.0.1.war"
                       destfile="${build.dir}/jsst-testng-test.war">
             <classes dir="${classes.dir}"/>
             <lib dir="${lib.dir}"/>

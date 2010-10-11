@@ -11,7 +11,7 @@
     <name>Java Server-Side Testing</name>
 
     <properties>
-        <build.number>0</build.number>
+        <build.number>1</build.number>
     </properties>
 
     <modules>
