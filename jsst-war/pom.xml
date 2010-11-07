@@ -1,8 +1,6 @@
-<?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-    <modelVersion>4.0.0</modelVersion>
 
     <parent>
         <groupId>jsst</groupId>
@@ -11,11 +9,33 @@
         <version>1.0.${build.number}</version>
     </parent>
     
+    <modelVersion>4.0.0</modelVersion>
     <groupId>jsst</groupId>
     <artifactId>jsst-war</artifactId>
     <version>1.0.${build.number}</version>
     <packaging>war</packaging>
-    <name>Java Server-Side Testing - War</name>
+    <name>Java Server-Side Testing framework - War</name>
+    <description>Provides WAR-archive that along with tests should be deployed on the server</description>
+    <url>http://github.com/shyiko/jsst</url>
+    <licenses>
+        <license>
+            <name>GNU Lesser General Public License</name>
+            <url>http://www.gnu.org/licenses/lgpl.html</url>
+            <distribution>repo</distribution>
+        </license>
+    </licenses>
+    <scm>
+        <connection>scm:git:git@github.com:shyiko/jsst.git</connection>
+        <developerConnection>scm:git:git@github.com:shyiko/jsst.git</developerConnection>
+        <url>git@github.com:shyiko/jsst.git</url>
+    </scm>
+    <developers>
+        <developer>
+            <id>shyiko</id>
+            <name>Stanley Shyiko</name>
+            <email>stanley.shyiko@gmail.com</email>
+        </developer>
+    </developers>
 
     <dependencies>
         <dependency>
@@ -36,6 +56,12 @@
         </dependency>
     </dependencies>
 
+    <properties>
+        <output.lib.dir>${project.parent.relativePath}/${build.dist.lib.dir}</output.lib.dir>
+        <output.src.dir>${project.parent.relativePath}/${build.dist.src.dir}</output.src.dir>
+        <output.third-party.dir>${project.parent.relativePath}/${build.dist.third-party.dir}</output.third-party.dir>
+    </properties>
+    
     <build>
         <plugins>
             <plugin>
@@ -46,19 +72,50 @@
                 </configuration>
             </plugin>
             <plugin>
-                <artifactId>maven-antrun-plugin</artifactId>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-war-plugin</artifactId>
+                <version>2.1.1</version>
+                <configuration>
+                    <packagingIncludes>WEB-INF/lib/jsst*.jar,WEB-INF/lib/json*.jar,**/*.xml,**/*.properties,**/*.class</packagingIncludes>
+                    <archiveClasses>true</archiveClasses>
+                    <failOnMissingWebXml>false</failOnMissingWebXml>
+                    <outputDirectory>${build.dist.lib.dir}</outputDirectory>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-source-plugin</artifactId>
+                <version>2.1.2</version>
                 <executions>
                     <execution>
-                        <goals>
-                            <goal>run</goal>
-                        </goals>
                         <phase>package</phase>
+                        <goals>
+                            <goal>jar</goal>
+                        </goals>
                         <configuration>
-                            <tasks>
-                                <copy verbose="true"
-                                      file="target/${project.artifactId}-${project.version}.${project.packaging}"
-                                      todir="../target"/>
-                            </tasks>
+                            <outputDirectory>${output.src.dir}</outputDirectory>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-dependency-plugin</artifactId>
+                <version>2.1</version>
+                <executions>
+                    <execution>
+                        <id>copy-dependencies</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>copy-dependencies</goal>
+                        </goals>
+                        <configuration>
+                            <outputDirectory>${output.third-party.dir}</outputDirectory>
+                            <overWriteReleases>true</overWriteReleases>
+                            <overWriteSnapshots>true</overWriteSnapshots>
+                            <excludeTransitive>true</excludeTransitive>
+                            <excludeScope>provided</excludeScope>
+                            <excludeArtifactIds>jsst-core</excludeArtifactIds>
                         </configuration>
                     </execution>
                 </executions>
