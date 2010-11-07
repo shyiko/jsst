@@ -3,6 +3,7 @@ Java Server-Side Testing framework
 1.0.3
 * LGPL has been chosen as a project license
 * Maven poms updated to meet Sonatype OSS requirements 
+* Scripts for making Nexus bundles added
 
 1.0.2
 * Automatic system properties loading from jsst-env.properties file
