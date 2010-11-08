@@ -80,6 +80,9 @@
                     <archiveClasses>true</archiveClasses>
                     <failOnMissingWebXml>false</failOnMissingWebXml>
                     <outputDirectory>${build.dist.lib.dir}</outputDirectory>
+                    <archive>
+                        <addMavenDescriptor>false</addMavenDescriptor>
+                    </archive>
                 </configuration>
             </plugin>
             <plugin>
