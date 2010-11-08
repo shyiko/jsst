@@ -15,6 +15,7 @@
  */
 package jsst.core.client.handler.impl;
 
+import jsst.core.client.dispatcher.impl.HTTPServerResponse;
 import jsst.core.client.handler.Handler;
 import jsst.core.client.handler.HandlerException;
 import jsst.core.client.handler.Status;
@@ -25,15 +26,19 @@ import org.json.JSONObject;
  * @author stanley.shyiko@gmail.com
  * @version Oct 3, 2010
  */
-public class HTTPHandler implements Handler<String> {
+public class HTTPHandler implements Handler<HTTPServerResponse> {
 
     public static final String RESPONSE_STATUS = "status";
     public static final String RESPONSE_THROWABLE = "throwable";
 
     @Override
-    public void handle(String response) throws HandlerException {
+    public void handle(HTTPServerResponse response) throws HandlerException {
+        if (response.getStatusCode() == 404)
+            throw new HandlerException("Page \"" + response.getUrl() + "\" is not available. " +
+                    "Seems like war with tests is either not deployed or " +
+                    "is deployed under different context-path from the one in jsst.properties");
         try {
-            JSONObject jsonObject = new JSONObject(response);
+            JSONObject jsonObject = new JSONObject(response.getMessage());
             String jsonStatus = jsonObject.getString(RESPONSE_STATUS);
             Status status;
             try {

@@ -16,6 +16,7 @@
 package jsst.core.client.aspects;
 
 import jsst.core.client.dispatcher.Dispatcher;
+import jsst.core.client.dispatcher.ServerResponse;
 import jsst.core.client.handler.Handler;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
@@ -40,7 +41,7 @@ public abstract class DispatcherAspect {
     @Around(value = "method()")
     public void dispatch(ProceedingJoinPoint joinPoint) throws Throwable {
         MethodSignature methodSignature = (MethodSignature) joinPoint.getSignature();
-        Object response = getDispatcher().dispatch(methodSignature.getMethod());
+        ServerResponse response = getDispatcher().dispatch(methodSignature.getMethod());
         getHandler().handle(response);
     }
 }

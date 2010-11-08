@@ -13,19 +13,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package jsst.core.client.handler;
+package jsst.core.client.dispatcher;
 
 /**
  * @author stanley.shyiko@gmail.com
- * @version Oct 3, 2010
+ * @version 2010-11-08
  */
-public class HandlerException extends Exception {
+public interface ServerResponse<T> {
 
-    public HandlerException(String message) {
-        super(message);
-    }
-
-    public HandlerException(String message, Throwable cause) {
-        super(message, cause);
-    }
+    T getMessage();
 }

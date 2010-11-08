@@ -22,12 +22,13 @@ import org.apache.commons.httpclient.methods.PostMethod;
 
 import java.io.IOException;
 import java.lang.reflect.Method;
+import java.net.ConnectException;
 
 /**
  * @author stanley.shyiko@gmail.com
  * @version Oct 3, 2010
  */
-public class HTTPDispatcher implements Dispatcher<String> {
+public class HTTPDispatcher implements Dispatcher<HTTPServerResponse> {
 
     public static final String REQUEST_PARAM_CLASS_NAME = "className";
     public static final String REQUEST_PARAM_METHOD_NAME = "methodName";
@@ -39,14 +40,18 @@ public class HTTPDispatcher implements Dispatcher<String> {
     }
 
     @Override
-    public String dispatch(Method method) throws DispatcherException {
+    public HTTPServerResponse dispatch(Method method) throws DispatcherException {
         HttpClient httpClient = new HttpClient();
         PostMethod postMethod = new PostMethod(url);
         postMethod.setParameter(REQUEST_PARAM_CLASS_NAME, method.getDeclaringClass().getCanonicalName());
         postMethod.setParameter(REQUEST_PARAM_METHOD_NAME, method.getName());
         try {
-            httpClient.executeMethod(postMethod);
-            return postMethod.getResponseBodyAsString();
+            try {
+                httpClient.executeMethod(postMethod);
+            } catch (ConnectException ex) {
+                throw new DispatcherException("Failed to connect to \"" + url + "\". Seems like server is down");
+            }
+            return new HTTPServerResponse(url, postMethod.getResponseBodyAsString(), postMethod.getStatusCode());
         } catch (IOException e) {
             throw new DispatcherException("Exception caught while sending request to \"" + url + "\"", e);
         } finally {

@@ -15,11 +15,13 @@
  */
 package jsst.core.client.handler;
 
+import jsst.core.client.dispatcher.ServerResponse;
+
 /**
  * @author stanley.shyiko@gmail.com
  * @version Oct 3, 2010
  */
-public interface Handler<T> {
+public interface Handler<T extends ServerResponse> {
 
     void handle(T response) throws HandlerException;
 }

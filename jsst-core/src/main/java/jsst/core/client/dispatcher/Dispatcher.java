@@ -21,7 +21,7 @@ import java.lang.reflect.Method;
  * @author stanley.shyiko@gmail.com
  * @version Oct 3, 2010
  */
-public interface Dispatcher<T> {
+public interface Dispatcher<T extends ServerResponse> {
 
     T dispatch(Method method) throws DispatcherException;
 }
