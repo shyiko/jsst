@@ -3,7 +3,7 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 
     <modelVersion>4.0.0</modelVersion>
-    <groupId>jsst</groupId>
+    <groupId>com.github.shyiko.jsst</groupId>
     <artifactId>jsst</artifactId>
     <version>1.0.${build.number}</version>
     <packaging>pom</packaging>
@@ -31,7 +31,7 @@
     </developers>
 
     <properties>
-        <build.number>3</build.number>
+        <build.number>4</build.number>
         <build.dir>build</build.dir>
         <build.dist.dir>${build.dir}/dist</build.dist.dir>
         <build.dist.lib.dir>${build.dist.dir}/lib</build.dist.lib.dir>

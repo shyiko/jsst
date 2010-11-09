@@ -3,14 +3,14 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 
     <parent>
-        <groupId>jsst</groupId>
+        <groupId>com.github.shyiko.jsst</groupId>
         <artifactId>jsst</artifactId>
         <relativePath>../</relativePath>
         <version>1.0.${build.number}</version>
     </parent>
     
     <modelVersion>4.0.0</modelVersion>
-    <groupId>jsst</groupId>
+    <groupId>com.github.shyiko.jsst</groupId>
     <artifactId>jsst-testng</artifactId>
     <version>1.0.${build.number}</version>
     <packaging>jar</packaging>
