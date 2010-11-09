@@ -20,11 +20,11 @@
  */
 private String getVersion() {
     String buildNumber = (new File("pom.xml").getText() =~ /<build.number>.*?<\/build.number>/)[0]
-    "1.0.${buildNumber[14..-16]}"
+    "${buildNumber[14..-16]}"
 }
 
-private String replaceVersionInformation(String source) {
-    source.replaceAll(/\$\{build.number\}/, {return "3"})
+private String replaceVersionInformation(String source, String version) {
+    source.replaceAll(/\$\{build.number\}/, {return version})
 }
 
 private String prepareForSonatypeOSS(String source) {
@@ -69,7 +69,7 @@ root.eachFile {
 }
 
 def transform = {String source ->
-    prepareForSonatypeOSS(replaceVersionInformation(source))
+    prepareForSonatypeOSS(replaceVersionInformation(source, version))
 }
 def save = {File file, String content ->
     print "Saving ${file.getAbsolutePath()}"
@@ -80,7 +80,7 @@ def save = {File file, String content ->
         "jsst-antlib", "jsst-core", "jsst-junit", "jsst-testng", "jsst-war"
 ].each {artifact ->
     def sourcePom = new File(artifact, "pom.xml")
-    def targetPom = new File(root, "${artifact}-${version}.pom")
+    def targetPom = new File(root, "${artifact}-1.0.${version}.pom")
     save targetPom, transform(sourcePom.getText()) 
 }
-save new File(root, "jsst-${version}.pom"), transform(moveModulesFromDefaultProfile(new File("pom.xml").getText()))
+save new File(root, "jsst-1.0.${version}.pom"), transform(moveModulesFromDefaultProfile(new File("pom.xml").getText()))
