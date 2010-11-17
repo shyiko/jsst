@@ -37,6 +37,7 @@
         <build.dist.lib.dir>${build.dist.dir}/lib</build.dist.lib.dir>
         <build.dist.src.dir>${build.dist.dir}/src</build.dist.src.dir>
         <build.dist.third-party.dir>${build.dist.dir}/third-party</build.dist.third-party.dir>
+        <build.dist.samples.dir>${build.dist.dir}/samples</build.dist.samples.dir>
         <build.dist.docs.javadocs.dir>${build.dist.dir}/docs/javadocs</build.dist.docs.javadocs.dir>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
@@ -75,6 +76,8 @@
                                     <fileset dir="${build.dist.third-party.dir}" includes="**/*"/>
                                     <fileset dir="${build.dist.docs.javadocs.dir}" includes="**/*"/>
                                 </delete>
+                                <delete dir="${build.dist.samples.dir}/jsst-junit-test/build"/>
+                                <delete dir="${build.dist.samples.dir}/jsst-testng-test/build"/>
                             </tasks>
                         </configuration>
                     </plugin>

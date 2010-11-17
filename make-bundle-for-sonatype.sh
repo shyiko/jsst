@@ -1,7 +1,7 @@
 #!/bin/bash
 GPG_PASSPHRASE=
 TARGET_DIRECTORY=build/oss-release
-VERSION=1.0.3
+VERSION=1.0.4
 
 function copyToOssRelease {
     for f in $1/*.*; do
