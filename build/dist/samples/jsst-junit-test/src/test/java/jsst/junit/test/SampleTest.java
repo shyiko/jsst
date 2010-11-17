@@ -1,19 +1,19 @@
-package jsst.testng.test;
+package jsst.junit.test;
 
-import org.testng.annotations.AfterClass;
-import org.testng.annotations.BeforeClass;
-import org.testng.annotations.Test;
+import org.junit.AfterClass;
+import org.junit.BeforeClass;
+import org.junit.Test;
 
-import static org.testng.Assert.assertEquals;
+import static org.junit.Assert.assertEquals;
 
 /**
  * @author shyiko
  * @since Oct 4, 2010
  */
-public class TestCase {
+public class SampleTest {
 
     @BeforeClass
-    public void beforeClass() {
+    public static void beforeClass() {
         System.out.println("beforeClass");
     }
 
@@ -23,8 +23,7 @@ public class TestCase {
     }
 
     @AfterClass
-    public void afterClass() {
+    public static void afterClass() {
         System.out.println("afterClass");
     }
-
 }

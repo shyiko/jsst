@@ -1,0 +1,100 @@
+<project xmlns:ivy="antlib:org.apache.ivy.ant" name="jsst-testng-test" default="all" basedir=".">
+
+    <property file="build.properties"/>
+
+    <property name="jsst.version" value="1.0.4"/>
+
+    <property name="src.test.java.dir" value="${basedir}/src/test/java"/>
+    <property name="src.test.resources.dir" value="${basedir}/src/test/resources"/>
+    <property name="build.dir" value="${basedir}/build/integration-test"/>
+    <property name="build.test-classes.dir" value="${build.dir}/test-classes"/>
+    <property name="build.test-reports.dir" value="${build.dir}/test-reports"/>
+    <property name="build.lib.dir" value="${build.dir}/lib"/>
+
+    <property name="build.war.filename" value="jsst-testng-test.war"/>
+
+    <target name="all" depends="init, compile, gen-war, deploy, jetty-start, test, jetty-stop, undeploy">
+        <fail message="Some tests have failed. Check reports for more details." if="test.failed"/>
+    </target>
+
+    <target name="init">
+        <delete dir="${build.dir}"/>
+        <mkdir dir="${build.dir}"/>
+        <mkdir dir="${build.test-classes.dir}"/>
+        <mkdir dir="${build.lib.dir}"/>
+        <ivy:retrieve pattern="${build.lib.dir}/[artifact]-[revision].[ext]" type="jar,war"/>
+        <typedef resource="antlib.xml" classpath="${build.lib.dir}/jsst-antlib-${jsst.version}.jar"/>
+    </target>
+
+    <target name="compile" depends="init">
+        <javac srcdir="${src.test.java.dir}" destdir="${build.test-classes.dir}" debug="on" debuglevel="lines,source">
+            <classpath>
+                <fileset dir="${build.lib.dir}" includes="*.jar"/>
+            </classpath>
+        </javac>
+        <copy todir="${build.test-classes.dir}" includeemptydirs="false">
+            <fileset dir="${src.test.resources.dir}" includes="**/*" excludes="META-INF/aop.xml,jsst.properties"/>
+        </copy>
+    </target>
+
+    <target name="gen-war" depends="compile">
+        <echo file="${build.test-classes.dir}/jsst-env.properties" message="SYSTEM.PROPERTY=value"/>
+        <jsst-gen-war war="${build.lib.dir}/jsst-war-${jsst.version}.war" destfile="${build.dir}/${build.war.filename}">
+            <classes dir="${build.test-classes.dir}"/>
+            <lib dir="${build.lib.dir}">
+                <include name="**/testng-*.jar"/>
+                <include name="**/jsst-testng-${jsst.version}.jar"/>
+            </lib>
+        </jsst-gen-war>
+    </target>
+
+    <target name="deploy">
+        <copy todir="${jetty.home}/webapps">
+            <fileset file="${build.dir}/${build.war.filename}"/>
+        </copy>
+    </target>
+
+    <target name="jetty-start">
+        <antcall target="jetty-stop"/>
+        <java spawn="true" jar="${jetty.home}/start.jar" fork="true" dir="${jetty.home}">
+            <jvmarg value="-Dfile.encoding=UTF-8"/>
+            <jvmarg value="-DSTOP.PORT=8079"/>
+            <jvmarg value="-DSTOP.KEY=secret"/>
+        </java>
+        <sleep seconds="3"/>
+    </target>
+
+    <target name="test">
+        <mkdir dir="${build.test-reports.dir}"/>
+        <taskdef resource="testngtasks" classpath="${build.lib.dir}/testng-5.12.1.jar"/>
+        <testng outputDir="${build.test-reports.dir}" failureProperty="test.failed">
+            <jvmarg value="-javaagent:${build.lib.dir}/aspectjweaver-1.6.9.jar"/>
+            <classpath>
+                <fileset dir="${build.lib.dir}" includes="**/*.jar"/>
+                <pathelement location="${build.test-classes.dir}"/>
+                <pathelement location="${src.test.resources.dir}"/>
+            </classpath>
+            <classfileset dir="${build.test-classes.dir}" includes="**/*.class"/>
+        </testng>
+    </target>
+
+    <target name="jetty-stop" depends="check-jetty-status" if="jetty.started">
+        <java jar="${jetty.home}/start.jar" fork="true" dir="${jetty.home}">
+            <jvmarg value="-DSTOP.PORT=8079"/>
+            <jvmarg value="-DSTOP.KEY=secret"/>
+            <arg value="--stop"/>
+        </java>
+    </target>
+
+    <target name="undeploy">
+        <delete>
+            <fileset file="${jetty.home}/webapps/${build.war.filename}"/>
+        </delete>
+    </target>
+
+    <target name="check-jetty-status">
+        <condition property="jetty.started">
+            <socket server="localhost" port="8080"/>
+        </condition>
+    </target>
+</project>

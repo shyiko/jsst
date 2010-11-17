@@ -1,5 +1,14 @@
 Java Server-Side Testing framework
 
+1.0.4
+* Artifacts uploaded to Maven Central Repository
+* Samples added to the distribution
+* jsst-war addMavenDescriptor set to false
+* Added commons-logging and commons-codec dependencies to jsst-core (transitive from commons-httpclient)
+* Added correct handling of HTTP-404 response and server connection errors
+* Artifacts groupId changed to com.github.shyiko.jsst due to Sonatype OSS requirements
+* Fixed transformPOMs.groovy version handling
+
 1.0.3
 * LGPL has been chosen as a project license
 * Maven poms updated to meet Sonatype OSS requirements 
